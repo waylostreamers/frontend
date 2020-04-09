@@ -1,9 +1,14 @@
+
+
 import React from 'react';
 import PropTypes from 'prop-types'
 import logo from './logo.svg';
 import './App.css';
 
+
 class App extends React.Component {
+
+
     constructor() {
         super();
         this.state = {
@@ -44,10 +49,14 @@ class App extends React.Component {
 
     render() {
 
-        const songs = this.state.trackdata.tracks
+
 
         if(!this.state.trackdata){return <p>loading ....</p>}
         if(!this.state.header){return <p>loading ....</p>}
+
+        const songs = this.state.trackdata.tracks
+
+        const songsDiv = songs && songs.map(song => <div>id:----> {song.id} ||  title:----> {song.title } ||   artist:----> {song.artist}</div>)
 
 
 
@@ -61,7 +70,7 @@ class App extends React.Component {
 
 
 
-
+                {/***
                 <table>
                     <tbody>
                     WAYLOSTREAMS TRACKS
@@ -70,19 +79,13 @@ class App extends React.Component {
                     </tbody>
                 </table>
 
-                {/***
-                <table>
-                    <tbody>
-                    WAYLOSTREAMS TRACKS
-                    {songs.map((track, i) => <TableRow key = {i}
-                                                                 data = {track} />)}
-                    </tbody>
-                </table>
                  ***/}
 
 
-                <div><pre>{JSON.stringify(songs, null, 2) }</pre></div>
+                {songsDiv}
 
+
+                {/** <div><pre>{JSON.stringify(songs, null, 2) }</pre></div> */}
 
 
 
@@ -91,6 +94,7 @@ class App extends React.Component {
     }
 }
 
+{/***
 class Content extends React.Component {
     render() {
         return (
@@ -101,6 +105,7 @@ class Content extends React.Component {
         );
     }
 }
+ **/}
 
 
 class TableRow extends React.Component {
@@ -110,19 +115,6 @@ class TableRow extends React.Component {
                 <td>id: {this.props.data.id}  </td>
                 <td>artist: {this.props.data.artist}  </td>
                 <td>title: {this.props.data.title}  </td>
-            </tr>
-        );
-    }
-}
-
-
-class TableRowApi extends React.Component {
-    render() {
-        return (
-            <tr>
-                <td>id: {this.state.trackdata.id}  </td>
-                <td>artist: {this.state.trackdata.artist}  </td>
-                <td>title: {this.state.trackdata.title}  </td>
             </tr>
         );
     }
