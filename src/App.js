@@ -1,123 +1,61 @@
-
-
 import React from 'react';
 import PropTypes from 'prop-types'
-import logo from './logo.svg';
 import './App.css';
 
-
 class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      trackdata: null
+    }
+  }
 
+  componentDidMount() {
+    fetch('https://qmlx4jv1uj.execute-api.us-west-2.amazonaws.com/latest/tracks')
+      .then(res => res.json())
+      .then(({ tracks }) => {
+        this.setState({ trackdata: tracks })
+      })
+  }
 
-    constructor() {
-        super();
-        this.state = {
-            header: [],
-            trackdata: [],
-            message: "Welcome to WayloStreams..",
-            content: "A great website...",
-            data:
-                [{"id":"waylo:track:0","title":"Oberheim","artist":"Sean Wayland"},
-                    {"id":"waylo:track:1","title":"Club Sandwich","artist":"Sean Wayland"}]
-
-        }
-
-       console.log(this.state.trackdata)
-        console.log(this.state.header)
-
-
-
+  render() {
+    if (!this.state.trackdata) {
+      return <p>loading ....</p>
     }
 
-    componentDidMount() {
-        var proxyUrl = 'https://cors-anywhere.herokuapp.com/',
-            targetUrl = 'https://qmlx4jv1uj.execute-api.us-west-2.amazonaws.com/latest/'
-        fetch(proxyUrl + targetUrl)
-            .then((response) => response.json())
-            .then(result => {
-                this.setState({ header: result });
-            });
-
-        var proxyUrl = 'https://cors-anywhere.herokuapp.com/',
-            targetUrl = 'https://qmlx4jv1uj.execute-api.us-west-2.amazonaws.com/latest/tracks'
-        fetch(proxyUrl + targetUrl)
-            .then((response) => response.json())
-            .then(result => {
-                this.setState({ trackdata: result});
-            });
-    }
-
-    render() {
-
-
-
-        if(!this.state.trackdata){return <p>loading ....</p>}
-        if(!this.state.header){return <p>loading ....</p>}
-
-        const songs = this.state.trackdata.tracks
-
-        const songsDiv = songs && songs.map(song => <div>id:----> {song.id} ||  title:----> {song.title } ||   artist:----> {song.artist}</div>)
-
-
-
-        return (
-            <div>
-                {/*<Header/>*/}
-
-                <h1>{this.state.header.message}</h1>
-
-                {/*<h2>{this.state.content}</h2>*/}
-
-
-
-                {/***
-                <table>
-                    <tbody>
-                    WAYLOSTREAMS TRACKS
-                    {this.state.data.map((track, i) => <TableRow key = {i}
-                                                                  data = {track} />)}
-                    </tbody>
-                </table>
-
-                 ***/}
-
-
-                {songsDiv}
-
-
-                {/** <div><pre>{JSON.stringify(songs, null, 2) }</pre></div> */}
-
-
-
-            </div>
-        );
-    }
-}
-
-{/***
-class Content extends React.Component {
-    render() {
-        return (
-            <div>
-                <div>{this.state.data.artist}</div>
-
-            </div>
-        );
-    }
-}
- **/}
-
-
-class TableRow extends React.Component {
-    render() {
-        return (
+    return (
+      <div>
+        <h1>Welcome to Waylostreams...</h1>
+        <table>
+          <thead>
             <tr>
-                <td>id: {this.props.data.id}  </td>
-                <td>artist: {this.props.data.artist}  </td>
-                <td>title: {this.props.data.title}  </td>
+              <th>ID</th>
+              <th>Artist</th>
+              <th>Title</th>
             </tr>
-        );
-    }
+          </thead>
+          <tbody>
+            { this.state.trackdata.map((track, i) => (
+              <TableRow
+                key = {i}
+                data = {track}
+              />
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+}
+
+const TableRow = props => {
+  return (
+    <tr>
+      <td>{props.data.id}</td>
+      <td>{props.data.artist}</td>
+      <td>{props.data.title}</td>
+    </tr>
+  );
 }
 
 export default App;
