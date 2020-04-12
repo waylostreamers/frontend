@@ -2,7 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types'
 import './App.css';
 
+const mystyle = {
+    color: "blue",
+    cursor: "pointer"
+};
+
 class Album extends React.Component {
+
     constructor() {
         super();
         this.state = {
@@ -38,6 +44,7 @@ class Album extends React.Component {
             .then(({ tracks }) => {
                 this.setState({ trackdata: tracks })
             })
+
     }
 
     render() {
@@ -73,17 +80,21 @@ class Album extends React.Component {
 }
 
 const TableRow = props => {
+
+
     return (
-        <tr onClick = {() => props.onClick(props.data.id)}  >
-            <td>{props.data.id}</td>
-            <td>{props.data.artist}</td>
-            <td>{props.data.title}</td>
+
+        <tr  onClick = {() => props.onClick(props.data.id)}  >
+            <td>{props.data.id}:  :</td>
+            <td>{props.data.artist}:  :</td>
+            <td style={mystyle}>{props.data.title}
+             : Click to play</td>
 
             <td>{props.data.url && (<audio onContextMenu="return false;" controls autobuffer onPlay="log_stream1()" controls
                                            controlsList="nodownload noremoteplayback">
                 <source src= {props.data.url} type="audio/mp3"></source>
             </audio>) }</td>
-        </tr>
+        < /tr>
     );
 }
 
