@@ -1,92 +1,33 @@
-import React from 'react';
-import PropTypes from 'prop-types'
-import './App.css';
+import React, { Component } from 'react';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import Home from './Home';
+import Album from './Album';
 
-class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      trackdata: null
+
+class App extends Component {
+    render() {
+        return (
+            <Router>
+                <div>
+                    <h2>WAYLOSTREAMS.COM</h2>
+                    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                        <ul className="navbar-nav mr-auto">
+                            <li><Link to={'/'} className="nav-link"> Home </Link></li>
+                            <li><Link to={'/Album'} className="nav-link">Album</Link></li>
+
+
+                        </ul>
+                    </nav>
+                    <hr />
+                    <Switch>
+                        <Route exact path='/' component={Home} />
+
+                        <Route path='/Album' component={Album} />
+                    </Switch>
+                </div>
+            </Router>
+        );
     }
-
-  }
-
-  getTrackUrl= (id) => {
-
-    fetch(`https://qmlx4jv1uj.execute-api.us-west-2.amazonaws.com/latest/track?track_id=${id}`)
-        .then(res => res.json())
-        .then(({ url }) => {
-          this.setState(state => {
-            /** newTracks returns a new array of tracks with one with an updated URL **/
-            const newTracks =  state.trackdata.map( track => {
-              return track.id === id ? { ...track, url } : track
-
-            })
-            /** return an updated state with url added to trackdata of track **/
-            return { trackdata:newTracks}
-
-
-          })
-        })
-  }
-
-
-
-  componentDidMount() {
-    fetch('https://qmlx4jv1uj.execute-api.us-west-2.amazonaws.com/latest/tracks')
-      .then(res => res.json())
-      .then(({ tracks }) => {
-        this.setState({ trackdata: tracks })
-      })
-  }
-
-  render() {
-    if (!this.state.trackdata) {
-      return <p>loading ....</p>
-    }
-
-    return (
-      <div>
-        <h1>Welcome to Waylostreams...</h1>
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Artist</th>
-              <th>Title</th>
-              <th>URL</th>
-            </tr>
-          </thead>
-          <tbody>
-            { this.state.trackdata.map((track, i) => (
-              <TableRow
-                key = {i}
-                data = {track}
-                onClick = {this.getTrackUrl}
-              />
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  }
 }
-
-const TableRow = props => {
-  return (
-    <tr onClick = {() => props.onClick(props.data.id)}  >
-      <td>{props.data.id}</td>
-      <td>{props.data.artist}</td>
-      <td>{props.data.title}</td>
-
-      <td>{props.data.url && (<audio onContextMenu="return false;" controls autobuffer onPlay="log_stream1()" controls
-                                    controlsList="nodownload noremoteplayback">
-        <source src= {props.data.url} type="audio/mp3"></source>
-      </audio>) }</td>
-    </tr>
-  );
-}
-
-
 
 export default App;
