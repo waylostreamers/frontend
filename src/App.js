@@ -7,7 +7,7 @@ import Album from './Album';
 class App extends Component {
     render() {
         return (
-            <Router>
+            <Router basename={process.env.BASENAME}>
                 <div>
                     <h2>WAYLOSTREAMS.COM</h2>
                     <nav className="navbar navbar-expand-lg navbar-light bg-light">
