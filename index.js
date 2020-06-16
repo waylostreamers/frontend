@@ -108,6 +108,7 @@ function render(renderData){
         Object.entries(tyre).forEach(([key, value]) => {
             var cell = row.append("td");
             cell.text(value);
+            cell.style.textAlign = "left"
 
         });
         
